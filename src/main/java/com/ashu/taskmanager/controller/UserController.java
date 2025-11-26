@@ -5,6 +5,7 @@ import com.ashu.taskmanager.dto.UserSignUpResDTO;
 import com.ashu.taskmanager.model.User;
 import com.ashu.taskmanager.response.ApiResponse;
 import com.ashu.taskmanager.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class UserController {
 
 
     @PostMapping("/users")
-    public ResponseEntity<ApiResponse<UserSignUpResDTO>> signup(@RequestBody UserSignUpDTO dto){
+    public ResponseEntity<ApiResponse<UserSignUpResDTO>> signup(@Valid @RequestBody UserSignUpDTO dto){
             User user = userService.signup(dto);
 
             UserSignUpResDTO resDTO = new UserSignUpResDTO();
@@ -36,8 +37,9 @@ public class UserController {
                  resDTO
          );
 
-         return new ResponseEntity<>(res, HttpStatus.CREATED);
+//         return new ResponseEntity<>(res, HttpStatus.CREATED);
 
-
+        return ResponseEntity.status(HttpStatus.CREATED).body(res);
+//            return ResponseEntity.ok(res);
     }
 }

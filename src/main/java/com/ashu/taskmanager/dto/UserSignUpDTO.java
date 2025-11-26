@@ -1,8 +1,18 @@
 package com.ashu.taskmanager.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
 public class UserSignUpDTO {
+
+    @NotBlank(message = "Name is Required")
     private String name;
+
+    @NotBlank(message = "Email is Required")
+    @Email
     private String email;
+
+    @NotBlank(message = "Password is Required")
     private String password;
 
     public String getName() {
