@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -62,7 +60,7 @@ public class UserController {
 
         AuthDTOs.LoginRes resDTO = new AuthDTOs.LoginRes(user.getEmail());
 
-        return ResponseEntity.ok(new ApiResponse<AuthDTOs.LoginRes>(
+        return ResponseEntity.ok(new ApiResponse<>(
                 "User LoggedIn successfully",
                 200,
                 resDTO

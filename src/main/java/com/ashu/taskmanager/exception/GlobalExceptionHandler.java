@@ -13,7 +13,7 @@ public class GlobalExceptionHandler {
 
     //Handles Validation Error
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiError> handleValidation(MethodArgumentNotValidException ex, HttpServletRequest req){
+    public ResponseEntity<ApiError> handleValidation(MethodArgumentNotValidException ex){
         String msg = ex.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
         return ResponseEntity.badRequest().body(new ApiError(msg));
     }

@@ -5,6 +5,6 @@ import com.ashu.taskmanager.dto.AuthDTOs;
 import com.ashu.taskmanager.model.User;
 
 public interface UserService {
-    public User signup(AuthDTOs.SignUpReq dto);
-    public User login(AuthDTOs.LoginReq dto);
+    User signup(AuthDTOs.SignUpReq dto);
+    User login(AuthDTOs.LoginReq dto);
 }
