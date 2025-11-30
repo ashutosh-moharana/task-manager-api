@@ -1,7 +1,7 @@
 package com.ashu.taskmanager.service;
 
-import com.ashu.taskmanager.dto.LoginDTO;
-import com.ashu.taskmanager.dto.UserSignUpDTO;
+import com.ashu.taskmanager.dto.AuthDTOs;
+import com.ashu.taskmanager.exception.BadCredentialsException;
 import com.ashu.taskmanager.model.User;
 import com.ashu.taskmanager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,27 +15,29 @@ public class UserServiceImp implements UserService{
     @Autowired
     UserRepository userRepository;
 
-    public User signup(UserSignUpDTO dto){
-        User user = new User();
+    public User signup(AuthDTOs.SignUpReq dto){
 
-        user.setName(dto.getName());
-        user.setEmail(dto.getEmail());
-        user.setPassword(dto.getPassword());
+        if(userRepository.findByEmail(dto.email()).isPresent()){
+            throw new BadCredentialsException("User Already Exists!");
+        }
+
+        User user = new User();
+        user.setName(dto.name());
+        user.setEmail(dto.email());
+        user.setPassword(dto.password());
         return userRepository.save(user);
     }
 
     @Override
-    public User login(String email,String password){
-       Optional<User> userOpt = userRepository.findByEmail(email);
+    public User login(AuthDTOs.LoginReq dto){
+       User user = userRepository
+                    .findByEmail(dto.email())
+                    .orElseThrow(()-> new BadCredentialsException("User Not Found"));
 
-       if(userOpt.isEmpty()){
-          return null;
+       if(!user.getPassword().equals(dto.password())){
+          throw new BadCredentialsException("Wrong Password");
        }
 
-       User user = userOpt.get();
-       if(!user.getPassword().equals(password)){
-           return null;
-       }
        return user;
     }
 

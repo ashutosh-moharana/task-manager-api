@@ -1,9 +1,6 @@
 package com.ashu.taskmanager.controller;
 
-import com.ashu.taskmanager.dto.LoginDTO;
-import com.ashu.taskmanager.dto.LoginResDTO;
-import com.ashu.taskmanager.dto.UserSignUpDTO;
-import com.ashu.taskmanager.dto.UserSignUpResDTO;
+import com.ashu.taskmanager.dto.*;
 import com.ashu.taskmanager.model.User;
 import com.ashu.taskmanager.response.ApiError;
 import com.ashu.taskmanager.response.ApiResponse;
@@ -28,15 +25,17 @@ public class UserController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity<ApiResponse<UserSignUpResDTO>> signup(@Valid @RequestBody UserSignUpDTO dto){
+    public ResponseEntity<ApiResponse<AuthDTOs.SignUpRes>> signup(@Valid @RequestBody AuthDTOs.SignUpReq  dto){
             User user = userService.signup(dto);
 
-            UserSignUpResDTO resDTO = new UserSignUpResDTO();
+//            UserSignUpResDTO resDTO = new UserSignUpResDTO();
+//
+//            resDTO.setName(user.getName());
+//            resDTO.setEmail(user.getEmail());
 
-            resDTO.setName(user.getName());
-            resDTO.setEmail(user.getEmail());
+        AuthDTOs.SignUpRes resDTO = new AuthDTOs.SignUpRes(user.getName(),user.getEmail());
 
-         ApiResponse<UserSignUpResDTO>  res = new ApiResponse<>(
+         ApiResponse<AuthDTOs.SignUpRes>  res = new ApiResponse<>(
                  "User Created Successfully!",
                  201,
                  resDTO
@@ -49,8 +48,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginDTO dto){
-        User user = userService.login(dto.getEmail(),dto.getPassword());
+    public ResponseEntity<?> login(@Valid @RequestBody AuthDTOs.LoginReq dto){
+        User user = userService.login(dto);
 
         if(user==null){
             return ResponseEntity
@@ -58,12 +57,14 @@ public class UserController {
                     .body(new ApiError("Invalid email or password"));
         }
 
-        LoginResDTO resDTO = new LoginResDTO();
-        resDTO.setEmail(user.getEmail());
+//        LoginResDTO resDTO = new LoginResDTO();
+//        resDTO.setEmail(user.getEmail());
 
-        return ResponseEntity.ok(new ApiResponse<LoginResDTO>(
+        AuthDTOs.LoginRes resDTO = new AuthDTOs.LoginRes(user.getEmail());
+
+        return ResponseEntity.ok(new ApiResponse<AuthDTOs.LoginRes>(
                 "User LoggedIn successfully",
-                201,
+                200,
                 resDTO
         ));
     }
